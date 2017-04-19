@@ -1,7 +1,9 @@
 #!/usr/bin/env bats
+# -*- mode: sh -*-
 
 load test_helper
 fixtures bats
+
 
 @test "no arguments prints usage instructions" {
   run bats
@@ -101,6 +103,33 @@ fixtures bats
 @test "test environments are isolated" {
   run bats "$FIXTURE_ROOT/environment.bats"
   [ $status -eq 0 ]
+}
+
+@test "setup_once is run once per test file" {
+    rm -f "$TMP/setup_once.log"
+    run bats "$FIXTURE_ROOT/setup_once.bats"
+    [ $status -eq 0 ]
+    run cat "$TMP/setup_once.log"
+    [ ${#lines[@]} -eq 1 ]
+}
+
+@test "teardown_once is run once per test file" {
+    rm -f "$TMP/teardown_once.log"
+    run bats "$FIXTURE_ROOT/teardown_once.bats"
+    [ $status -eq 0 ]
+    run cat "$TMP/teardown_once.log"
+    [ "$output" = "once" ]
+    [ ${#lines[@]} -eq 1 ]
+}
+
+@test "testing setup/teardown/setup_once/teardown_once together" {
+    rm -f "$TMP/everything.log"
+    run bats "$FIXTURE_ROOT/everything.bats"
+    echo $output
+    [ $status -eq 0 ]
+    run cat "$TMP/everything.log"
+    echo $output
+    [ "$output" = "setup_once,setup,teardown,setup,teardown,setup,teardown,teardown_once," ]
 }
 
 @test "setup is run once before each test" {

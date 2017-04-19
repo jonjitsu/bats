@@ -168,10 +168,16 @@ Or you can skip conditionally:
 }
 ```
 
-### `setup` and `teardown`: Pre- and post-test hooks
+### `setup` and `teardown`: pre- and post-test hooks
 
 You can define special `setup` and `teardown` functions, which run
 before and after each test case, respectively. Use these to load
+fixtures, set up your environment, and clean up when you're done.
+
+### `setup_once` and `teardown_once`: pre- and post-testfile hooks
+
+You can define special `setup_once` and `teardown_once` functions, which run 
+before and after each test file is run, respectively. Use these to load 
 fixtures, set up your environment, and clean up when you're done.
 
 ### Code outside of test cases
@@ -234,6 +240,10 @@ on the wiki.
 
 
 ## Version history
+
+*0.4.1* (April 19, 2017)
+* Added setup_once and teardown_once. You can now define setup and
+  teardown code that will run once per file.
 
 *0.4.0* (August 13, 2014)
 
